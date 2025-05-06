@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filtro de Personajes de Rick and Morty</title>
+
+    <!-- Cargar React y ReactDOM desde el CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+    <!-- Babel para procesar JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- Aquí React montará la app -->
+    <div id="root"></div>
+
+    <!-- Nuestro código JSX -->
+    <script type="text/babel">
+        // Componente UserSearch
+        const { useState, useMemo } = React;
+      
+        const UserSearch = () => {
+          const [users, setUsers] = useState([
+            {
+              name: 'Joel Antonio Jaquez López',
+              description:
+                'Me encanta jugar a los videojuegos, ver series y películas de superheroes o videojuegos y por supuesto comer pizza.',
+            },
+            {
+              name: 'Rick Sanchez',
+              description:
+                'Le gusta emborracharse, inventar tecnología interdimensional y burlarse de todo.',
+            },
+            {
+              name: 'Morty Smith',
+              description:
+                'Le gusta acompañar a Rick en sus aventuras, aunque casi siempre lo mete en problemas.',
+            },
+            {
+              name: 'Summer Smith',
+              description:
+                'Le gusta demostrar que es inteligente y a veces termina salvando a todos.',
+            },
+            {
+              name: 'Beth Smith',
+              description:
+                'Le gusta su trabajo como veterinaria de caballos y cuestionarse su existencia.',
+            },
+          ]);
+          const [search, setSearch] = useState('');
+          const [newName, setNewName] = useState('');
+          const [newDescription, setNewDescription] = useState('');
+      
+          // Filtrado con distinción entre mayúsculas y minúsculas
+          const filteredUsers = useMemo(() => {
+            console.log('Filtrando usuarios (sensible a mayúsculas y minúsculas)...');
+            return users.filter(
+              (user) =>
+                user.name.includes(search) || user.description.includes(search)
+            );
+          }, [search, users]);
+      
+          const addUser = () => {
+            if (newName.trim() === '' || newDescription.trim() === '') {
+              alert('Por favor, completa ambos campos para agregar un usuario.');
+              return;
+            }
+            setUsers([...users, { name: newName, description: newDescription }]);
+            setNewName('');
+            setNewDescription('');
+          };
+      
+          return (
+            <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+              <h1>Buscar Usuarios</h1>
+      
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Buscar por nombre o descripción (sensitivo a mayúsculas)"
+                style={{ padding: '8px', width: '300px', marginRight: '10px' }}
+              />
+      
+              <h2>Agregar Nuevo Usuario</h2>
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Nombre del usuario"
+                style={{ padding: '8px', marginRight: '10px', width: '200px' }}
+              />
+              <input
+                type="text"
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="Descripción"
+                style={{ padding: '8px', marginRight: '10px', width: '300px' }}
+              />
+              <button onClick={addUser} style={{ padding: '8px 16px' }}>
+                Agregar Usuario
+              </button>
+      
+              <h2 style={{ marginTop: '30px' }}>Lista de Usuarios</h2>
+              <ul>
+                {filteredUsers.map((user, index) => (
+                  <li key={index} style={{ marginBottom: '15px' }}>
+                    <strong>{user.name}</strong>
+                    <p>{user.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        };
+      
+        
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<UserSearch />);
+      </script>
+      
+
